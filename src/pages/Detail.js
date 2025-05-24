@@ -8,11 +8,28 @@ const Detail = () => {
   const [entity, setEntity] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const typeMap = {
+    characters: "people",
+    vehicles: "vehicles",
+    planets: "planets"
+  };
+
   useEffect(() => {
     const fetchDetail = async () => {
       setLoading(true);
-      const result = await fetchEntityDetails(type, uid);
-      setEntity({ ...result.properties, uid, type, name: result.properties.name });
+      const apiType = typeMap[type] || type;
+      const result = await fetchEntityDetails(apiType, uid);
+      if (result && result.properties) {
+        setEntity({
+          ...result.properties,
+          uid,
+          type,
+          name: result.properties.name || result.properties.title || "Sin nombre",
+          description: result.description || ""
+        });
+      } else {
+        setEntity(null);
+      }
       setLoading(false);
     };
     fetchDetail();
@@ -31,7 +48,7 @@ const Detail = () => {
         <div className="col-md-6">
           <ul className="list-group">
             {Object.entries(entity).map(([key, value]) =>
-              key !== "uid" && key !== "type" && key !== "name" ? (
+              key !== "uid" && key !== "type" && key !== "name" && key !== "description" ? (
                 <li className="list-group-item" key={key}>
                   <strong>{key}:</strong> {String(value)}
                 </li>

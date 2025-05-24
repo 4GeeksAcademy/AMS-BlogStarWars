@@ -28,12 +28,42 @@ body {
 }
 
 .btn-favorite {
-    background-color: #ffc107;
-    border: none;
+    background: #fff;
+    border: 2px solid #ffc107;
+    color: #ffc107;
+    padding: 6px 14px;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    font-size: 1.3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.btn-favorite:hover {
-    background-color: #e0a800;
+.favorite-heart {
+    transition: fill 0.2s, stroke 0.2s;
+    display: block;
+}
+
+.btn-favorite.active .favorite-heart {
+    fill: #ffc107;
+    stroke: #ffc107;
+}
+
+.btn-favorite:not(.active) .favorite-heart {
+    fill: none;
+    stroke: #ffc107;
+}
+
+.btn-favorite.active:hover .favorite-heart,
+.btn-favorite.active:focus .favorite-heart {
+    fill: #dc3545;
+    stroke: #dc3545;
+}
+
+.btn-favorite:hover, .btn-favorite:focus {
+    background: #fffbe6;
+    border-color: #ffc107;
 }
 
 .modal-content {

@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchPeople, fetchVehicles, fetchPlanets } from "../services/swapi";
 import Card from "../components/Card";
-
-const mapType = {
-  people: "characters",
-  vehicles: "vehicles",
-  planets: "planets"
-};
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [people, setPeople] = useState([]);
@@ -32,28 +27,44 @@ const Home = () => {
 
   if (loading) return <div className="container">Cargando...</div>;
 
+  // Slider CSS en línea
+  const sliderStyle = {
+    display: "flex",
+    overflowX: "auto",
+    gap: "16px",
+    paddingBottom: "16px"
+  };
+
   return (
     <div className="container">
-      <h2>Personajes</h2>
-      <div className="row mb-4">
+      <h2>
+        <Link to="/characters" className="section-link">Personajes</Link>
+      </h2>
+      <div style={sliderStyle}>
         {people.map(entity => (
-          <div className="col-md-4" key={entity.uid}>
+          <div style={{ minWidth: 300, flex: "0 0 auto" }} key={entity.uid}>
             <Card entity={entity} />
           </div>
         ))}
       </div>
-      <h2>Vehículos</h2>
-      <div className="row mb-4">
+
+      <h2>
+        <Link to="/vehicles" className="section-link">Vehículos</Link>
+      </h2>
+      <div style={sliderStyle}>
         {vehicles.map(entity => (
-          <div className="col-md-4" key={entity.uid}>
+          <div style={{ minWidth: 300, flex: "0 0 auto" }} key={entity.uid}>
             <Card entity={entity} />
           </div>
         ))}
       </div>
-      <h2>Planetas</h2>
-      <div className="row mb-4">
+
+      <h2>
+        <Link to="/planets" className="section-link">Planetas</Link>
+      </h2>
+      <div style={sliderStyle}>
         {planets.map(entity => (
-          <div className="col-md-4" key={entity.uid}>
+          <div style={{ minWidth: 300, flex: "0 0 auto" }} key={entity.uid}>
             <Card entity={entity} />
           </div>
         ))}

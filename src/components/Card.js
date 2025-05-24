@@ -2,6 +2,13 @@ import React, { useContext } from "react";
 import { FavoritesContext } from "../context/FavoritesContext";
 import { Link } from "react-router-dom";
 
+const placeholders = {
+  characters: "https://starwars-visualguide.com/assets/img/big-placeholder.jpg",
+  vehicles: "https://starwars-visualguide.com/assets/img/vehicles/1.jpg",
+  planets: "https://starwars-visualguide.com/assets/img/planets/1.jpg",
+  default: "https://starwars-visualguide.com/assets/img/big-placeholder.jpg"
+};
+
 const getImageUrl = (type, uid) => {
   let base = "https://starwars-visualguide.com/assets/img";
   switch (type) {
@@ -12,7 +19,7 @@ const getImageUrl = (type, uid) => {
     case "planets":
       return `${base}/planets/${uid}.jpg`;
     default:
-      return `${base}/big-placeholder.jpg`;
+      return placeholders.default;
   }
 };
 
@@ -30,15 +37,20 @@ const Card = ({ entity }) => {
     }
   };
 
+  const imageUrl = getImageUrl(entity.type, Number(entity.uid));
+  const placeholder = placeholders[entity.type] || placeholders.default;
+
+  console.log("URL de imagen:", imageUrl, "UID:", entity.uid, "TYPE:", entity.type);
+
   return (
     <div className="card mb-3 h-100">
       <img
-        src={getImageUrl(entity.type, entity.uid)}
+        src={imageUrl}
         alt={entity.name}
         className="card-img-top"
         onError={e => {
           e.target.onerror = null;
-          e.target.src = "https://starwars-visualguide.com/assets/img/big-placeholder.jpg";
+          e.target.src = placeholder;
         }}
         style={{ objectFit: "cover", height: "250px" }}
       />
@@ -49,10 +61,41 @@ const Card = ({ entity }) => {
             Ver detalles
           </Link>
           <button
-            className={`btn btn-sm ${isFavorite ? "btn-danger" : "btn-primary"}`}
+            className={`btn btn-favorite ${isFavorite ? "active" : ""}`}
             onClick={handleFavoriteToggle}
+            title={isFavorite ? "Quitar de Favoritos" : "Agregar a Favoritos"}
           >
-            {isFavorite ? "Quitar de Favoritos" : "Agregar a Favoritos"}
+            {isFavorite ? (
+              // Corazón relleno amarillo
+              <svg
+                className="favorite-heart"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="#ffc107"
+                stroke="#ffc107"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 21s-6.7-5.6-8.5-7.7C1.1 11.2 1 8.2 3.1 6.1c2.1-2.1 5.5-2.1 7.6 0l1.3 1.3 1.3-1.3c2.1-2.1 5.5-2.1 7.6 0 2.1 2.1 2 5.1-.4 7.2C18.7 15.4 12 21 12 21z"/>
+              </svg>
+            ) : (
+              // Corazón vacío con contorno amarillo
+              <svg
+                className="favorite-heart"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#ffc107"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 21s-6.7-5.6-8.5-7.7C1.1 11.2 1 8.2 3.1 6.1c2.1-2.1 5.5-2.1 7.6 0l1.3 1.3 1.3-1.3c2.1-2.1 5.5-2.1 7.6 0 2.1 2.1 2 5.1-.4 7.2C18.7 15.4 12 21 12 21z"/>
+              </svg>
+            )}
           </button>
         </div>
       </div>
